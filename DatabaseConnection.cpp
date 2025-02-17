@@ -3,19 +3,26 @@
 // open connection to database
 DatabaseConnection::DatabaseConnection() {
     conn = mysql_init(0);
-    conn = mysql_real_connect(conn, "localhost", "root", "", "therapy_mgmt", 3306, NULL, 0);
-    if (conn)
-        std::cout << "Database Connected Successfully!" << std::endl;
-    else
-        std::cerr << "Connection Failed: " << mysql_error(conn) << std::endl;
-
-    std::this_thread::sleep_for(std::chrono::seconds(2));  // 2 seconds pause
+    conn = mysql_real_connect(conn, "localhost", "root", "", "therapy_mgmt", 3306, NULL, 0);  
 }
 
 // close connection to database
 DatabaseConnection::~DatabaseConnection() {
     if (conn)
         mysql_close(conn);
+}
+
+bool DatabaseConnection::checkConnection() {
+    if (conn) {
+        std::cout << "Initializing...." << std::endl;
+        return true;
+    }
+    else {
+        std::cerr << "Connection Failed: " << mysql_error(conn) << std::endl;
+        return false;
+    }
+
+    std::this_thread::sleep_for(std::chrono::seconds(2));  // 2 seconds pause
 }
 
 // to execute query to database
